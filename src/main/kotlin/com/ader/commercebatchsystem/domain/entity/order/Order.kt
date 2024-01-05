@@ -1,4 +1,4 @@
-package com.ader.commercebatchsystem.domain.entity
+package com.ader.commercebatchsystem.domain.entity.order
 
 import jakarta.persistence.*
 import java.math.BigDecimal

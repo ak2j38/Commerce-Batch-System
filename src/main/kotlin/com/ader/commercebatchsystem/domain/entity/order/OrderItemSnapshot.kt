@@ -1,5 +1,7 @@
-package com.ader.commercebatchsystem.domain.entity
+package com.ader.commercebatchsystem.domain.entity.order
 
+import com.ader.commercebatchsystem.domain.entity.Product
+import com.ader.commercebatchsystem.domain.entity.Seller
 import com.ader.commercebatchsystem.domain.enums.TaxType
 import com.ader.commercebatchsystem.domain.enums.TaxTypeConverter
 import jakarta.persistence.*
