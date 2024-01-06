@@ -20,10 +20,21 @@ repositories {
 }
 
 dependencies {
+  implementation("org.springframework.boot:spring-boot-starter-batch")
   implementation("org.springframework.boot:spring-boot-starter-data-jdbc")
   implementation("org.springframework.boot:spring-boot-starter-data-jpa")
   implementation("org.jetbrains.kotlin:kotlin-reflect")
+  implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
+  implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+  implementation("org.jetbrains.kotlin:kotlin-reflect")
+
+  implementation("jakarta.persistence:jakarta.persistence-api:3.1.0")
+  implementation("jakarta.annotation:jakarta.annotation-api")
+
   testImplementation("org.springframework.boot:spring-boot-starter-test")
+  testImplementation("org.springframework.batch:spring-batch-test")
+
+  runtimeOnly("com.mysql:mysql-connector-j")
 }
 
 tasks.withType<KotlinCompile> {
