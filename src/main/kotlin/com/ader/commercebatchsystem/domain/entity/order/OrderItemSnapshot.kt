@@ -30,12 +30,6 @@ class OrderItemSnapshot(
     val taxRate: Int? = 3,
     @Convert(converter = TaxTypeConverter::class)
     val taxType: TaxType? = TaxType.TAX,
-    @ManyToOne
-    @JoinColumn(name = "seller_no", insertable = false, updatable = false)
-    val seller: Seller,
-    @ManyToOne
-    @JoinColumn(name = "product_no", insertable = false, updatable = false)
-    val product: Product,
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -57,8 +51,6 @@ class OrderItemSnapshot(
         if (itemCategory != other.itemCategory) return false
         if (taxRate != other.taxRate) return false
         if (taxType != other.taxType) return false
-        if (seller != other.seller) return false
-        if (product != other.product) return false
 
         return true
     }
@@ -78,8 +70,6 @@ class OrderItemSnapshot(
         result = 31 * result + (itemCategory ?: 0)
         result = 31 * result + (taxRate ?: 0)
         result = 31 * result + (taxType?.hashCode() ?: 0)
-        result = 31 * result + seller.hashCode()
-        result = 31 * result + product.hashCode()
         return result
     }
 }
