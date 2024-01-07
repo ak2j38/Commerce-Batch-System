@@ -17,12 +17,16 @@ class OrderItem(
     val createdAt: ZonedDateTime? = ZonedDateTime.now(),
     val updatedAt: ZonedDateTime? = ZonedDateTime.now(),
     val deletedAt: ZonedDateTime? = null,
-    val purchaseConfirmedAt: ZonedDateTime? = null,
+    var purchaseConfirmedAt: ZonedDateTime? = null,
     val shippedCompleteAt: ZonedDateTime? = null,
     @OneToOne
     @JoinColumn(name = "order_item_snapshot_no", insertable = false, updatable = false)
     val orderItemSnapshot: OrderItemSnapshot,
 ) {
+    fun updatePurchaseConfirmedAt() {
+        this.purchaseConfirmedAt = ZonedDateTime.now()
+    }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false

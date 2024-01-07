@@ -13,7 +13,11 @@ import org.springframework.transaction.annotation.Transactional
 class PurchaseConfirmedWriter(
     private val orderItemRepository: OrderItemRepository
 ): ItemWriter<OrderItem> {
-    override fun write(@NonNull chunk: Chunk<out OrderItem>) {
-        orderItemRepository.saveAll(chunk)
+    override fun write(@NonNull items: Chunk<out OrderItem>) {
+        items.forEach {
+            it.updatePurchaseConfirmedAt()
+        }
+
+        orderItemRepository.saveAll(items)
     }
 }

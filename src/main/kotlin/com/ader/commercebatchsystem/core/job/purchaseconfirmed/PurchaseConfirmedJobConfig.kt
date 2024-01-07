@@ -39,14 +39,8 @@ class PurchaseConfirmedJobConfig(
         return StepBuilder(JOB_NAME + "_step", jobRepository)
             .chunk<OrderItem, OrderItem>(CHUNK_SIZE, transactionManager)
             .reader(deliveryCompletedJpaItemReader)
-            .processor(purchaseConfirmedProcessor())
             .writer(purchaseConfirmedItemWriter())
             .build()
-    }
-
-    @Bean
-    fun purchaseConfirmedProcessor(): PurchaseConfirmedProcessor {
-        return PurchaseConfirmedProcessor()
     }
 
     @Bean
