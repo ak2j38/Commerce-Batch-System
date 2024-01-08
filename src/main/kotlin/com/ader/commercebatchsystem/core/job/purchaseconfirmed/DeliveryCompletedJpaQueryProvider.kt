@@ -15,7 +15,10 @@ class DeliveryCompletedJpaQueryProvider(
             """
                 SELECT oi
                 FROM OrderItem oi
+                  LEFT OUTER JOIN ClaimReceipt cr ON oi.orderNo = cr.orderNo
                 WHERE oi.shippedCompleteAt BETWEEN :startDateTime AND :endDateTime
+                  AND oi.purchaseConfirmedAt IS NULL
+                  AND (cr.orderNo IS NULL OR cr.completedAt IS NOT NULL) 
             """.trimIndent(),
             OrderItem::class.java
         )
