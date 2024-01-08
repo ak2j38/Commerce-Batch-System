@@ -16,15 +16,23 @@ class ClaimReceipt(
     val createdAt: ZonedDateTime? = ZonedDateTime.now(),
     val updatedAt: ZonedDateTime? = ZonedDateTime.now(),
     val deletedAt: ZonedDateTime? = null,
-    val completedAt: ZonedDateTime? = null,
+    var completedAt: ZonedDateTime? = null,
     @Convert(converter = ClaimTypeConverter::class)
     val requestType: ClaimType,
     @Convert(converter = ClaimStatusConverter::class)
-    val claimStatus: ClaimStatus,
+    var claimStatus: ClaimStatus,
     @Convert(converter = ExtraFeePayerConverter::class)
     val extraFeePayer: ExtraFeePayer,
     val claimReason: Int,
 ) {
+    fun updateCompletedAt() {
+        this.completedAt = ZonedDateTime.now()
+    }
+
+    fun updateClaimStatus(claimStatus: ClaimStatus) {
+        this.claimStatus = claimStatus
+    }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
