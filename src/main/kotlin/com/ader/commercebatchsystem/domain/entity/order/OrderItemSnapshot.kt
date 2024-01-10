@@ -30,6 +30,12 @@ class OrderItemSnapshot(
     val taxRate: Int? = 3,
     @Convert(converter = TaxTypeConverter::class)
     val taxType: TaxType? = TaxType.TAX,
+    @ManyToOne
+    @JoinColumn(name = "seller_no", referencedColumnName = "id" , insertable = false, updatable = false)
+    val seller: Seller,
+    @ManyToOne
+    @JoinColumn(name = "product_no", referencedColumnName = "id" , insertable = false, updatable = false)
+    val product: Product
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
