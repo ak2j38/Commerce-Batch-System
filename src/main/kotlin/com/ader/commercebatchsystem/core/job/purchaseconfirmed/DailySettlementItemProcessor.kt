@@ -1,5 +1,6 @@
 package com.ader.commercebatchsystem.core.job.purchaseconfirmed
 
+import com.ader.commercebatchsystem.domain.collection.TaxCalculator
 import com.ader.commercebatchsystem.domain.entity.order.OrderItem
 import com.ader.commercebatchsystem.domain.entity.settlement.SettlementDaily
 import org.springframework.batch.item.ItemProcessor
@@ -12,9 +13,8 @@ class DailySettlementItemProcessor: ItemProcessor<OrderItem, SettlementDaily> {
         val orderItemSnapShot = item.orderItemSnapshot
         val count = item.orderCount
         val seller = orderItemSnapShot.seller
-
-        // 세금 계산
-        val tax = BigDecimal.ZERO
+        val taxCalculator = TaxCalculator(orderItemSnapShot)
+        val tax = taxCalculator.getTaxAmount()
 
         // + 정산 금액에 필요한 데이터 만들기
         val pgSalesAmount = BigDecimal.ZERO
