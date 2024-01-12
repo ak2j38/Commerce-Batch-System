@@ -1,5 +1,6 @@
 package com.ader.commercebatchsystem.core.job.purchaseconfirmed
 
+import com.ader.commercebatchsystem.domain.entity.claim.ClaimItem
 import com.ader.commercebatchsystem.domain.entity.order.OrderItem
 import com.ader.commercebatchsystem.domain.entity.settlement.SettlementDaily
 import com.ader.commercebatchsystem.infrastructure.data.repository.OrderItemRepository
@@ -27,6 +28,7 @@ class PurchaseConfirmedJobConfig(
     private val settlementDailyRepository: SettlementDailyRepository,
     @Qualifier("deliveryCompletedJpaItemReader") private val deliveryCompletedJpaItemReader: JpaPagingItemReader<OrderItem>,
     @Qualifier("dailySettlementItemReader") private val dailySettlementItemReader: JpaPagingItemReader<OrderItem>,
+    @Qualifier("claimSettlementItemReader") private val claimSettlementItemReader: JpaPagingItemReader<ClaimItem>,
 ) {
     val JOB_NAME = "purchaseConfirmedJob"
     val CHUNK_SIZE = 500
@@ -36,6 +38,7 @@ class PurchaseConfirmedJobConfig(
         return JobBuilder(JOB_NAME, jobRepository)
             .start(purchaseConfirmedStep())
             .next(dailySettlementStep())
+            .next(claimSettlementJobStep())
             .build()
     }
 
@@ -73,5 +76,14 @@ class PurchaseConfirmedJobConfig(
     @Bean
     fun dailySettlementItemWriter(): DailySettlementItemWriter {
         return DailySettlementItemWriter(settlementDailyRepository)
+    }
+
+    @Bean
+    @JobScope
+    fun claimSettlementJobStep(): Step {
+        return StepBuilder(JOB_NAME + "_claimSettlement_step", jobRepository)
+            .chunk<ClaimItem, SettlementDaily>(CHUNK_SIZE, transactionManager)
+            .reader(claimSettlementItemReader)
+            .build()
     }
 }
