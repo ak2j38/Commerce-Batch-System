@@ -3,6 +3,7 @@ package com.ader.commercebatchsystem.core.job.purchaseconfirmed
 import com.ader.commercebatchsystem.domain.entity.order.OrderItem
 import com.ader.commercebatchsystem.domain.entity.settlement.SettlementDaily
 import com.ader.commercebatchsystem.infrastructure.data.repository.OrderItemRepository
+import com.ader.commercebatchsystem.infrastructure.data.repository.SettlementDailyRepository
 import org.springframework.batch.core.Job
 import org.springframework.batch.core.Step
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing
@@ -23,6 +24,7 @@ class PurchaseConfirmedJobConfig(
     private val jobRepository: JobRepository,
     private val transactionManager: PlatformTransactionManager,
     private val orderItemRepository: OrderItemRepository,
+    private val settlementDailyRepository: SettlementDailyRepository,
     @Qualifier("deliveryCompletedJpaItemReader") private val deliveryCompletedJpaItemReader: JpaPagingItemReader<OrderItem>,
     @Qualifier("dailySettlementItemReader") private val dailySettlementItemReader: JpaPagingItemReader<OrderItem>,
 ) {
@@ -59,11 +61,17 @@ class PurchaseConfirmedJobConfig(
             .chunk<OrderItem, SettlementDaily>(CHUNK_SIZE, transactionManager)
             .reader(dailySettlementItemReader)
             .processor(dailySettlementItemProcessor())
+            .writer(dailySettlementItemWriter())
             .build()
     }
 
     @Bean
     fun dailySettlementItemProcessor(): DailySettlementItemProcessor {
         return DailySettlementItemProcessor()
+    }
+
+    @Bean
+    fun dailySettlementItemWriter(): DailySettlementItemWriter {
+        return DailySettlementItemWriter(settlementDailyRepository)
     }
 }

@@ -43,6 +43,4 @@ class DailySettlementItemReaderConfig(
             .queryProvider(customQueryProvider)
             .build()
     }
-
-
 }
