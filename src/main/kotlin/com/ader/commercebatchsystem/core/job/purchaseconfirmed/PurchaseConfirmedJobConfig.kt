@@ -1,6 +1,7 @@
 package com.ader.commercebatchsystem.core.job.purchaseconfirmed
 
 import com.ader.commercebatchsystem.core.job.purchaseconfirmed.claim.ClaimSettlementItemProcessor
+import com.ader.commercebatchsystem.core.job.purchaseconfirmed.claim.ClaimSettlementItemWriter
 import com.ader.commercebatchsystem.domain.entity.claim.ClaimItem
 import com.ader.commercebatchsystem.domain.entity.order.OrderItem
 import com.ader.commercebatchsystem.domain.entity.settlement.SettlementDaily
@@ -86,6 +87,7 @@ class PurchaseConfirmedJobConfig(
             .chunk<ClaimItem, SettlementDaily>(CHUNK_SIZE, transactionManager)
             .reader(claimSettlementItemReader)
             .processor(claimSettlementItemProcessor())
+            .writer(claimSettlementItemWriter())
             .build()
     }
 
@@ -93,5 +95,10 @@ class PurchaseConfirmedJobConfig(
     @JobScope
     fun claimSettlementItemProcessor(): ClaimSettlementItemProcessor {
         return ClaimSettlementItemProcessor()
+    }
+
+    @Bean
+    fun claimSettlementItemWriter(): ClaimSettlementItemWriter {
+        return ClaimSettlementItemWriter(settlementDailyRepository)
     }
 }
