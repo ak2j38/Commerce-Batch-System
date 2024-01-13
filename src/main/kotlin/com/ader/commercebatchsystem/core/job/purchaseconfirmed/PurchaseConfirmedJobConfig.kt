@@ -1,5 +1,6 @@
 package com.ader.commercebatchsystem.core.job.purchaseconfirmed
 
+import com.ader.commercebatchsystem.core.job.purchaseconfirmed.claim.ClaimSettlementItemProcessor
 import com.ader.commercebatchsystem.domain.entity.claim.ClaimItem
 import com.ader.commercebatchsystem.domain.entity.order.OrderItem
 import com.ader.commercebatchsystem.domain.entity.settlement.SettlementDaily
@@ -84,6 +85,13 @@ class PurchaseConfirmedJobConfig(
         return StepBuilder(JOB_NAME + "_claimSettlement_step", jobRepository)
             .chunk<ClaimItem, SettlementDaily>(CHUNK_SIZE, transactionManager)
             .reader(claimSettlementItemReader)
+            .processor(claimSettlementItemProcessor())
             .build()
+    }
+
+    @Bean
+    @JobScope
+    fun claimSettlementItemProcessor(): ClaimSettlementItemProcessor {
+        return ClaimSettlementItemProcessor()
     }
 }
