@@ -4,6 +4,7 @@ import com.ader.commercebatchsystem.domain.entity.settlement.SettlementTotal
 import com.ader.commercebatchsystem.domain.projection.SummingSettlementResponse
 import org.springframework.batch.core.Job
 import org.springframework.batch.core.Step
+import org.springframework.batch.core.configuration.annotation.JobScope
 import org.springframework.batch.core.job.builder.JobBuilder
 import org.springframework.batch.core.repository.JobRepository
 import org.springframework.batch.core.step.builder.StepBuilder
@@ -32,9 +33,17 @@ class TotalSettlementJobConfig(
     }
 
     @Bean
+    @JobScope
     fun totalSettlementStep(): Step {
         return StepBuilder(JOB_NAME + "_step", jobRepository)
             .chunk<SummingSettlementResponse, SettlementTotal>(chunkSize, transactionManagement)
+            .reader(totalSettlementItemReader)
+            .processor(totalSettlementItemProcessor())
             .build()
+    }
+
+    @Bean
+    fun totalSettlementItemProcessor(): TotalSettlementItemProcessor {
+        return TotalSettlementItemProcessor()
     }
 }
