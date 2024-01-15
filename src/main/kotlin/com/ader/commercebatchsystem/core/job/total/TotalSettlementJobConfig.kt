@@ -2,6 +2,7 @@ package com.ader.commercebatchsystem.core.job.total
 
 import com.ader.commercebatchsystem.domain.entity.settlement.SettlementTotal
 import com.ader.commercebatchsystem.domain.projection.SummingSettlementResponse
+import com.ader.commercebatchsystem.infrastructure.data.repository.SettlementTotalRepository
 import org.springframework.batch.core.Job
 import org.springframework.batch.core.Step
 import org.springframework.batch.core.configuration.annotation.JobScope
@@ -21,6 +22,7 @@ class TotalSettlementJobConfig(
     private val jobRepository: JobRepository,
     private val transactionManagement: PlatformTransactionManager,
     @Qualifier("totalSettlementItemReader") private val totalSettlementItemReader: JpaPagingItemReader<SummingSettlementResponse>,
+    private val settlementTotalRepository: SettlementTotalRepository
 ) {
     private val JOB_NAME = "totalSettlementJob"
     private val chunkSize = 500
@@ -39,11 +41,17 @@ class TotalSettlementJobConfig(
             .chunk<SummingSettlementResponse, SettlementTotal>(chunkSize, transactionManagement)
             .reader(totalSettlementItemReader)
             .processor(totalSettlementItemProcessor())
+            .writer(totalSettlementItemWriter())
             .build()
     }
 
     @Bean
     fun totalSettlementItemProcessor(): TotalSettlementItemProcessor {
         return TotalSettlementItemProcessor()
+    }
+
+    @Bean
+    fun totalSettlementItemWriter(): TotalSettlementItemWriter {
+        return TotalSettlementItemWriter(settlementTotalRepository)
     }
 }
