@@ -14,6 +14,10 @@ class PurchaseConfirmedWriter(
     private val orderItemRepository: OrderItemRepository
 ): ItemWriter<OrderItem> {
     override fun write(@NonNull items: Chunk<out OrderItem>) {
+        if (true) {
+            throw Exception()
+        }
+
         items.forEach {
             it.updatePurchaseConfirmedAt()
         }

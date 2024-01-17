@@ -2,6 +2,7 @@ package com.ader.commercebatchsystem.core.job.purchaseconfirmed
 
 import com.ader.commercebatchsystem.core.job.purchaseconfirmed.claim.ClaimSettlementItemProcessor
 import com.ader.commercebatchsystem.core.job.purchaseconfirmed.claim.ClaimSettlementItemWriter
+import com.ader.commercebatchsystem.core.listener.PurchaseConfirmedChunkListener
 import com.ader.commercebatchsystem.domain.entity.claim.ClaimItem
 import com.ader.commercebatchsystem.domain.entity.order.OrderItem
 import com.ader.commercebatchsystem.domain.entity.settlement.SettlementDaily
@@ -51,6 +52,8 @@ class PurchaseConfirmedJobConfig(
             .chunk<OrderItem, OrderItem>(CHUNK_SIZE, transactionManager)
             .reader(deliveryCompletedJpaItemReader)
             .writer(purchaseConfirmedItemWriter())
+            .listener(PurchaseConfirmedChunkListener())
+            .allowStartIfComplete(true)
             .build()
     }
 
