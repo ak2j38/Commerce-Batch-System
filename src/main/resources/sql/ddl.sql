@@ -44,3 +44,30 @@ CREATE TABLE order_item_snapshot
     mileage_usage_amount    decimal(14, 5)                           null,
     PRIMARY KEY(order_item_snapshot_no)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='주문 상품 스냅샷 테이블'
+
+create table claim_item
+(
+    claim_item_no    bigint                             not null
+        primary key,
+    claim_receipt_no bigint                             not null,
+    created_at       datetime default CURRENT_TIMESTAMP not null,
+    updated_at       datetime default CURRENT_TIMESTAMP not null,
+    deleted_at       datetime                           null,
+    order_item_no    bigint                             not null,
+    claim_count      int                                null
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='클레임 상품';
+
+create table claim_receipt
+(
+    claim_receipt_no bigint                             not null
+        primary key,
+    order_no         bigint                             not null,
+    created_at       datetime default CURRENT_TIMESTAMP not null,
+    updated_at       datetime default CURRENT_TIMESTAMP not null,
+    deleted_at       datetime                           null,
+    completed_at     datetime                           null,
+    request_type     varchar(50)                        not null,
+    claim_status     int                                not null,
+    extra_fee_payer  int                                not null,
+    claim_reason     int                                not null
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='클레임 원장';
