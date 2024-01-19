@@ -71,3 +71,19 @@ create table claim_receipt
     extra_fee_payer  int                                not null,
     claim_reason     int                                not null
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='클레임 원장';
+
+create table product
+(
+    product_no   bigint auto_increment comment '상품 식별키 '
+        primary key,
+    created_at   datetime       default CURRENT_TIMESTAMP not null comment '생성시간',
+    updated_at   datetime       default CURRENT_TIMESTAMP not null comment '수정시간',
+    deleted_at   datetime                                 null comment '삭제시간',
+    product_name varchar(100)                             not null,
+    seller_no    bigint                                   not null comment '셀러pk',
+    category     int                                      not null comment '상품 카테고리',
+    tax_type     char(4)        default 'TAX'             not null comment '세금유형',
+    sell_price   decimal(14, 5) default 0.00000           not null comment '판매가 ',
+    supply_price decimal(14, 5) default 0.00000           not null comment '공급가 ',
+    is_active    tinyint(1)     default 1                 null comment '상품 활성화 여부 '
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='상품';
