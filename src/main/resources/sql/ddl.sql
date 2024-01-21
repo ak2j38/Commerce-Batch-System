@@ -196,3 +196,21 @@ create table BATCH_STEP_EXECUTION_SEQ
     constraint UNIQUE_KEY_UN
         unique (UNIQUE_KEY)
 );
+
+create table seller
+(
+    seller_no               bigint auto_increment comment '셀러를 구별하는 PK '
+        primary key,
+    seller_name             varchar(50)                          not null comment '셀러명',
+    business_no             int                                  not null comment '셀러의 사업자번호',
+    sell_type               char       default 'C'               not null comment '판매유형 ( P : 매입 , C : 위탁 )  ',
+    created_at              datetime   default CURRENT_TIMESTAMP not null comment '생성시간',
+    updated_at              datetime   default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '수정시간',
+    deleted_at              datetime                             null comment '삭제시간',
+    bank_type               varchar(10)                          null comment '은행타입',
+    account_no              int                                  null comment '계좌번호',
+    account_owner_name      varchar(50)                          null comment '계좌주 ',
+    is_active               tinyint(1) default 1                 not null comment '셀러 활성화 여부 ',
+    default_delivery_amount int        default 3000              not null comment '기본 배송 금액 ',
+    commission              int        default 5                 not null comment '수수료'
+) comment '셀러 정보 관리 테이블 ';
