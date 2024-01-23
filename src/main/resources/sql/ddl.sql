@@ -214,3 +214,24 @@ create table seller
     default_delivery_amount int        default 3000              not null comment '기본 배송 금액 ',
     commission              int        default 5                 not null comment '수수료'
 ) comment '셀러 정보 관리 테이블 ';
+
+create table Settlement_total
+(
+    settlement_total_id       bigint auto_increment
+        primary key,
+    settlement_date           date                                     not null,
+    seller_no                 bigint                                   not null,
+    seller_name               varchar(255)                             not null,
+    seller_business_number    varchar(255)                             null,
+    tax_type                  varchar(255)   default 'TAX'             null,
+    sell_type                 varchar(255)   default 'CONSIGNMENT'     null,
+    pg_sales_amount           decimal(14, 5) default 0.00000           not null,
+    coupon_discount_amount    decimal(14, 5) default 0.00000           not null,
+    mileage_usage_amount      decimal(14, 5) default 0.00000           not null,
+    shipping_fee_amount       decimal(14, 5) default 0.00000           not null,
+    claim_shipping_fee_amount decimal(14, 5) default 0.00000           not null,
+    commission_amount         decimal(14, 5) default 0.00000           not null,
+    created_at                datetime       default CURRENT_TIMESTAMP null,
+    updated_at                datetime       default CURRENT_TIMESTAMP null,
+    deleted_at                datetime                                 null
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='정산 합계';
